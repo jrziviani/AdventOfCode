@@ -1,4 +1,4 @@
-### Having some fun playing the [Advent of Code 2025](https://adventofcode.com/)
+### Having some fun playing the [Advent of Code 2024](https://adventofcode.com/)
 
 | Day | Language | Puzzle |
 | ---:|----------|  :---: |
