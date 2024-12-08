@@ -6,8 +6,8 @@
 |  2  | **F#**   | https://github.com/jrziviani/AoC2025/tree/master/day_2 |
 |  3  | **Python** | https://github.com/jrziviani/AoC2025/tree/master/day_3 |
 |  4  | **C** | https://github.com/jrziviani/AoC2025/tree/master/day_4 |
-|  5  | | |
-|  6  | | | 
+|  5  | **Rust** | https://github.com/jrziviani/AoC2025/tree/master/day_5 |
+|  6  | **C++** | https://github.com/jrziviani/AoC2025/tree/master/day_6 |
 |  7  | | |
 |  8  | | |
 |  9  | | |
