@@ -9,6 +9,6 @@
 |  5  | **Rust** | https://github.com/jrziviani/AoC2025/tree/master/day_5 |
 |  6  | **C++** | https://github.com/jrziviani/AoC2025/tree/master/day_6 |
 |  7  | **Python** | https://github.com/jrziviani/AoC2025/tree/master/day_7 |
-|  8  | | |
+|  8  | **C#** | https://github.com/jrziviani/AoC2025/tree/master/day_8 |
 |  9  | | |
 | 10  | | |
