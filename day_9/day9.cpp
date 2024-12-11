@@ -157,6 +157,12 @@ void partII(const string &line) {
 
     defrag(disk);
     cout << "Part II: " << checksum(disk) << endl;
+
+    for (int i = 0; i < disk.size(); ++i) {
+        if (disk[i] != nullptr) {
+            delete disk[i];
+        }
+    }
 }
 
 void partI(const string &line) {
@@ -179,6 +185,12 @@ void partI(const string &line) {
 
     defragblocks(disk);
     cout << "Part I: " << checksum(disk) << endl;
+
+    for (int i = 0; i < disk.size(); ++i) {
+        if (disk[i] != nullptr) {
+            delete disk[i];
+        }
+    }
 }
 
 int main() {
