@@ -2,19 +2,55 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <unordered_map>
 
 using namespace std;
 
+struct aocfile {
+    int id;
+    int index;
+    int size;
+    char repr;
+};
 
-using zchar = vector<int>;
-using zstring = vector<vector<int>>;
+using disk_t = vector<aocfile*>;
 
-long long int checksum(const zstring &input) {
-    long long int sum = 0;
-    int k = 0;
-    for (int i = 0; i < input.size(); ++i) {
-        for (int j = 0; j < input[i].size(); ++j) {
-            sum += input[i][j] * k;
+void print(const disk_t &disk) {
+    for (int i = 0; i < disk.size(); ++i) {
+        if (disk[i] == nullptr) {
+            continue;
+        }
+
+        const aocfile *file = disk[i];
+        if (file->id == -1) {
+            for (int j = 0; j < file->size; ++j) {
+                cout << file->repr;
+            }
+        }
+        else {
+            for (int j = 0; j < file->size; ++j) {
+                cout << file->id;
+            }
+        }
+    }
+    cout << endl;
+}
+
+long int checksum(const disk_t &disk) {
+    long int sum = 0;
+    for (int i = 0, k = 0; i < disk.size(); i++) {
+        if (disk[i] == nullptr) {
+            continue;
+        }
+
+        if (disk[i]->id == -1) {
+            k += disk[i]->size;
+            continue;
+        }
+
+        const aocfile *file = disk[i];
+        for (int j = 0; j < file->size; ++j) {
+            sum += file->id * k;
             k++;
         }
     }
@@ -22,155 +58,137 @@ long long int checksum(const zstring &input) {
     return sum;
 }
 
-zchar expand(int s, int n) {
-    zchar output(n);
-
-    for (int i = 0; i < n; ++i) {
-        output[i] = s;
-    }
-
-    return output;
-}
-
-zstring expand_fs(const string &input) {
-    zstring output;
-
-    for (size_t i = 0, j = 0; i < input.size(); ++i) {
-        int ntimes = input[i] - '0';
-
-        if (ntimes == 0) {
+void defragblocks(disk_t &disk) {
+    int j = disk.size() - 1;
+    int i = 0;
+    while (i < j) {
+        if (disk[i] == nullptr || disk[i]->id != -1) {
+            i++;
             continue;
         }
+        // print(disk);
+
+        aocfile *free_block = disk[i];
+        aocfile *last_file = disk[j];
+
+        while (last_file == nullptr || last_file->id == -1) {
+            last_file = disk[--j];
+        }
+
+        aocfile *new_free_block = new aocfile{-1, j, 1, '.'};
+        aocfile *new_file = new aocfile{last_file->id, i, 1, last_file->repr};
         
-        if (i % 2 == 1) {
-            output.push_back(expand(-1, ntimes));
+        delete last_file;
+        disk[j] = new_free_block;
+
+        delete free_block;
+        disk[i] = new_file;
+
+        j--;
+        i++;
+    }
+}
+
+void defrag(disk_t &disk) {
+    int j = disk.size() - 1;
+    for (int i = 0; i < disk.size(); ++i) {
+        if (disk[i] == nullptr || disk[i]->id != -1) {
+            continue;
+        }
+
+        for (int l = 0; l < j; l++) {
+            const aocfile *free_block = disk[l];
+            if (free_block == nullptr || free_block->id != -1) {
+                continue;
+            }
+
+            aocfile *last_file = disk[j];
+            while (last_file == nullptr || last_file->id == -1) {
+                last_file = disk[--j];
+            }
+
+            if (last_file->size > free_block->size) {
+                continue;
+            }
+
+            int rest_size = free_block->size - last_file->size;
+
+            aocfile *new_free_block = new aocfile{-1, j, last_file->size, '.'};
+            delete free_block;
+            disk[l] = nullptr;
+
+            if (rest_size > 0) {
+                aocfile *new_rest_block = new aocfile{-1, l, rest_size, '.'};
+                disk[l + last_file->size] = new_rest_block;
+            }
+
+            aocfile *new_file = new aocfile{last_file->id, l, last_file->size, last_file->repr};
+            delete last_file;
+            disk[j] = nullptr;
+
+            disk[new_file->index] = new_file;
+            disk[new_free_block->index] = new_free_block;
+            break;
+        }
+
+        j--;
+    }
+}
+
+void partII(const string &line) {
+    disk_t disk;
+    for (int i = 0, j = 0, k = 0; i < line.size(); ++i) {
+        int n = line[i] - '0';
+
+        if (i & 1 == 1) {
+            disk.push_back(new aocfile{-1, k, n, '.'});
         }
         else {
-            output.push_back(expand(j, ntimes));
+            disk.push_back(new aocfile{j, k, n, 'x'});
             j++;
         }
+
+        k += n;
+
+        while (n-- > 0) {
+            disk.push_back(nullptr);
+        }
     }
 
-    return output;
+    defrag(disk);
+    cout << "Part II: " << checksum(disk) << endl;
 }
 
-zstring compact(const zstring &input) {
-    int left = 0;
-    int i = 0;
-    int right = input.size() - 1;
-    int j = input[right].size() - 1;
+void partI(const string &line) {
+    disk_t disk;
+    for (int i = 0, k = 0; i < line.size(); ++i) {
+        int n = line[i] - '0';
 
-    zstring output;
-
-    zchar c;
-    while (left <= right) {
-        if (left == right && i > j) {
-            break;
-        }
-
-        if (j < 0) {
-            do {
-                right--;
-                j = input[right].size() - 1;
-            } while (j < 0);
-        }
-
-        if (input.size() < right && input[right].size() < j && input[right][j] == -1) {
-            j--;
-        }
-        else if (input.size() < left && input[left].size() < i && input[left][i] == -1) {
-            c.push_back(input[right][j]);
-            j--;
-            i++;
-        }
-        else {
-            c.push_back(input[left][i]);
-            i++;
-        }
-
-        if (i >= input[left].size()) {
-            i = 0;
-            left++;
-            output.push_back(c);
-            c.clear();
-        }
-    }
-
-    if (c.size() > 0) {
-        output.push_back(c);
-    }
-
-    return output;
-}
-
-
-zstring compact(zstring &input) {
-    int left = 0;
-    int i = 0;
-    int right = input.size() - 1;
-    int j = right >= 0 ? input[right].size() - 1 : -1; // Handle empty input.
-
-    zstring output;
-    zchar c;
-
-    while (left <= right) {
-        if (left == right && i > j) {
-            break;
-        }
-
-        // Skip empty rows from the right.
-        while (right >= 0 && j < 0) {
-            right--;
-            j = (right >= 0) ? input[right].size() - 1 : -1;
-        }
-
-        if (right < 0) { // If we've exhausted all elements on the right.
-            break;
-        }
-
-        // Copy or move elements from right to left.
-        if (i < input[left].size() && j >= 0 && input[right][j] != -1) {
-            input[left][i] = input[right][j];
-            c.push_back(input[right][j]);
-            j--;
-            i++;
-        } else if (i < input[left].size() && input[left][i] != -1) {
-            c.push_back(input[left][i]);
-            i++;
-        } else {
-            j--;
-        }
-
-        // Move to the next row from the left if the current row is done.
-        if (i >= input[left].size()) {
-            i = 0;
-            left++;
-            if (!c.empty()) {
-                output.push_back(c);
-                c.clear();
+        if (i & 1 == 1) {
+            for (int j = 0; j < n; ++j) {
+                disk.push_back(new aocfile{-1, i, 1, '.'});
             }
         }
+        else {
+            for (int j = 0; j < n; ++j) {
+                disk.push_back(new aocfile{k, i, 1, 'x'});
+            }
+            k++;
+        }
     }
 
-    // Add any remaining characters to the output.
-    if (!c.empty()) {
-        output.push_back(c);
-    }
-
-    return output;
+    defragblocks(disk);
+    cout << "Part I: " << checksum(disk) << endl;
 }
 
-
 int main() {
-    ifstream file("example.txt");
+    ifstream file("input.txt");
     string line;
     getline(file, line);
     file.close();
 
-    auto expanded = expand_fs(line);
-    auto compacted = compact(expanded);
-    cout << checksum(compacted) << endl;
+    partI(line);
+    partII(line);
 
-    
     return 0;
 }
