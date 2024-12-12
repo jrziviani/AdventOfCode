@@ -161,11 +161,11 @@ void part_ii() {
   run_testcases2("example3.txt", 13);
   run_testcases2("example7.txt", 227);
   run_testcases2("example5.txt", 81);
-  run_testcases2("input.txt", 659);
+  run_testcases2("input.txt", 1463);
 }
 
 int main() {
-  // part_i();
+  part_i();
   part_ii();
 
   return 0;
