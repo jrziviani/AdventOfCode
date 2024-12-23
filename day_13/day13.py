@@ -2,18 +2,18 @@ import re
 
 
 def linear_solver(a, b, prize) -> int:
-    resA = b[0] * prize[1] - b[1] * prize[0]
-    resB = b[0] * a[1] - b[1] * a[0]
-    if resA % resB != 0:
+    nom = prize[1] * a[0] - prize[0] * a[1]
+    denom = b[1] * a[0] - b[0] * a[1]
+    if nom % denom != 0:
         return float('inf')
 
-    bestA = resA // resB
-    resB = prize[0] - a[0] * bestA
-    if resB % b[0] != 0:
+    best_b = nom // denom
+    nom_a = prize[0] - b[0] * best_b
+    if nom_a % a[0] != 0:
         return float('inf')
 
-    bestB = resB // b[0]
-    return 3 * bestA + bestB
+    best_a = nom_a // a[0]
+    return 3 * best_a + best_b
 
 
 def solver(a, b, prize) -> int:
