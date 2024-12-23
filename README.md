@@ -14,3 +14,4 @@
 | 10  | **C++** | https://github.com/jrziviani/AoC2024/tree/master/day_10 |
 | 11  | **C++** | https://github.com/jrziviani/AoC2024/tree/master/day_11 |
 | 12  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_12 |
+| 13  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_13 |
