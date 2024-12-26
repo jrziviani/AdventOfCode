@@ -16,3 +16,5 @@
 | 12  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_12 |
 | 13  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_13 |
 | 14  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_14 |
+| 15  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_15 |
+| 16  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_16 |
