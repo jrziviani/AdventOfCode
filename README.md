@@ -22,3 +22,4 @@
 | 18  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_18 |
 | 19  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_19 |
 | 20  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_20 |
+| 21  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_21 |

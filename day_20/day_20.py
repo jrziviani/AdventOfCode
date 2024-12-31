@@ -60,8 +60,11 @@ def djikstra(grid, row, col, nrows, ncols):
     print('Part I:', total)
 
     total = 0
+    memo = set()
     for path in parents.keys():
         pr, pc = path
+
+        memo.add(path)
 
         for r in range(-20, 21):
             for c in range(-20, 21):
@@ -72,13 +75,13 @@ def djikstra(grid, row, col, nrows, ncols):
                 if distance > 20:
                     continue
 
-                if (dr, dc) in visited:
+                if (dr, dc) in visited and (dr, dc) not in memo:
                     cost1 = visited[(dr, dc)]
                     cost2 = visited[path]
                     if abs(cost2 - cost1) - distance >= 100:
                         total += 1
 
-    print(f"Part II: {total // 2 + 1}")
+    print(f"Part II: {total + 1}")
 
 
 def printer(grid, nrows):
