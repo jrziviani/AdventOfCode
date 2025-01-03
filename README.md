@@ -25,3 +25,4 @@
 | 21  | **Python** | https://github.com/jrziviani/AoC2024/tree/master/day_21 |
 | 22  | **C++** | https://github.com/jrziviani/AoC2024/tree/master/day_22 |
 | 23  | **C++** | https://github.com/jrziviani/AoC2024/tree/master/day_23 |
+| 24  | **C++** | https://github.com/jrziviani/AoC2024/tree/master/day_24 |
