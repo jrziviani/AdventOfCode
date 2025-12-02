@@ -18,17 +18,17 @@ def check_freq_range(start: int, end: int) -> int:
     for num in range(start, end + 1):
         snum = str(num)
         lnum = len(snum)
-        lastc = ''
-        for i in range(lnum):
-            repeat = lnum // (i + 1)
-            if repeat <= 1:
-                break
+
+        for i in range(1, lnum // 2 + 1):
+            if lnum % i != 0:
+                continue
+
+            prefix = snum[:i]
+            repeat = lnum // i
             
-            tmp = lastc + snum[i]
-            if tmp * repeat == snum:
+            if prefix * repeat == snum:
                 result += num
                 break
-            lastc = tmp
 
     return result
 
